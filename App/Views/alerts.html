@@ -1,0 +1,11 @@
+{% for error in errors %}
+<div class="alert alert-danger" role="alert">
+  {{error}}
+</div>
+{% endfor %}
+
+{% for alert in alerts %}
+<div class="alert alert-success" role="alert">
+  {{alert}}
+</div>
+{% endfor %}

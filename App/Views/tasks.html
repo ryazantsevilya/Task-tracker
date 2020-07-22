@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        {% include 'navbar.html' %}
+        {% include 'alerts.html' %}
+        <h1>Tasks</h1>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col" ><a href="?sort_key=username&sort_by={% if sorted_by == 'desc' %}asc{% else %}desc{% endif %}">User</a></th>
+                <th scope="col"><a href="?sort_key=email&sort_by={% if sorted_by == 'desc' %}asc{% else %}desc{% endif %}">E-mail</a></th>
+                <th scope="col">Content</th>
+                <th scope="col"><a href="?sort_key=status&sort_by={% if sorted_by == 'desc' %}asc{% else %}desc{% endif %}">Status</a></th>
+                {% if session.auth == true %}
+                <th scope="col">Actions</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+            {% for item in tasks %}
+              <tr>
+                <td>{{item.username}}</td>
+                <td>{{item.email}}</td>
+                <td style="word-break: break-all;">{{item.content}}</td>
+                <td>
+                  <span class="badge badge-primary">{{item.status}}</span>
+                  {% if item.isChanged %}
+                  <span class="badge badge-primary">Отредактировано администратором</span>
+                  {% endif %}
+                </td>
+                {% if session.auth == true %}
+                <td>
+                  <form action="/task/{{item._id}}">
+                    <button type="submit" class="btn btn-success">Edit</button>
+                  </form>
+                </td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+            {% if count == 0 %}
+              <tr>
+                <td colspan="4">Tasks not found. <a href="/create"> Create a new task</a></td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+          {% if pages > 1 %}
+          <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item {% if current_page == 1 %} disabled {% endif %}">
+                <a class="page-link" href="/{{ current_page - 1 }}?sort_key={{sorted_key}}&sort_by={{sorted_by}}" tabindex="-1">Previous</a>
+              </li>
+              {% for pageNum in 1..pages %}
+              <li class="page-item {% if pageNum == current_page %}active{% endif %}"><a class="page-link" href="/{{pageNum}}?sort_key={{sorted_key}}&sort_by={{sorted_by}}">{{ pageNum }}</a></li>
+              {% endfor %}
+              <li class="page-item {% if current_page == pages %} disabled {% endif %}">
+                <a class="page-link" href="/{{ current_page + 1 }}?sort_key={{sorted_key}}&sort_by={{sorted_by}}">Next</a>
+              </li>
+            </ul>
+          </nav>
+          {% endif %}
+    </div>
+</body>
+</html>
