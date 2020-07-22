@@ -9,7 +9,7 @@
 <body>
     <div class="container">
       {% include 'navbar.html' %}
-      <h1>Edit task {{task.status}}</h1>
+      <h1>Edit task</h1>
       {% include 'alerts.html' %}
       {% if task %}
         <form method="POST" action="/task/{{task._id}}">
@@ -26,7 +26,7 @@
               <textarea name="content" class="form-control" rows="3">{{task.content}}</textarea>
             </div>
 
-            <div class="form-check">
+            <div class="form-check mt-3 mb-3">
               {% if task.status == 'READY' %}
               <input type="checkbox" name="status" value="true" class="form-check-input" checked>
               {% else %}
